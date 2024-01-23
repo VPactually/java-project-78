@@ -1,7 +1,7 @@
 package hexlet.code.schemas;
 
 
-public class StringSchema implements BaseSchema{
+public class StringSchema implements BaseSchema {
     private boolean required = false;
     private int strLength = 0;
     private String strSubstring = "";
