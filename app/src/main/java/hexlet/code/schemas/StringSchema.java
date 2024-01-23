@@ -1,7 +1,7 @@
 package hexlet.code.schemas;
 
 
-public class StringSchema {
+public class StringSchema implements BaseSchema{
     private boolean required = false;
     private int strLength = 0;
     private String strSubstring = "";
@@ -9,7 +9,9 @@ public class StringSchema {
     public StringSchema() {
     }
 
-    public boolean isValid(String str) {
+    @Override
+    public boolean isValid(Object obj) {
+        String str = (String) obj;
         if (!required) {
             return true;
         }
@@ -33,13 +35,11 @@ public class StringSchema {
         return this;
     }
 
+    @Override
     public StringSchema required() {
         required = true;
         return this;
     }
 
-    public boolean isValid(int number) {
-        return isValid(Integer.toString(number));
-    }
 
 }
