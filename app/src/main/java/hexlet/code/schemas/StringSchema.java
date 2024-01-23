@@ -6,9 +6,6 @@ public class StringSchema implements BaseSchema {
     private int strLength = 0;
     private String strSubstring = "";
 
-    public StringSchema() {
-    }
-
     @Override
     public boolean isValid(Object obj) {
         String str = (String) obj;

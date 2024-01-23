@@ -8,9 +8,6 @@ public class NumberSchema implements BaseSchema {
     private int lowerBound;
     private int upperBound;
 
-    public NumberSchema() {
-    }
-
     @Override
     public boolean isValid(Object obj) {
         if (!required) {

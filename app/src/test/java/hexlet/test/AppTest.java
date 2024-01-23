@@ -3,15 +3,20 @@ package hexlet.test;
 import hexlet.code.Validator;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
+import hexlet.code.schemas.MapScheme;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 public class AppTest {
     private Validator v;
     private StringSchema stringSchema;
     private NumberSchema numberSchema;
+    private MapScheme mapScheme;
 
     @BeforeEach
     public void beforeEach() {
@@ -56,6 +61,25 @@ public class AppTest {
         assertThat(numberSchema.isValid(10)).isTrue();
         assertThat(numberSchema.isValid(1)).isFalse();
         assertThat(numberSchema.isValid(11)).isFalse();
+    }
+
+    @Test
+    public void testValidatorMap() {
+        mapScheme = (MapScheme) v.map();
+        var data = new HashMap<>(Map.of("key1", "value1"));
+
+        assertThat(mapScheme.isValid(null)).isTrue();
+
+        mapScheme.required();
+
+        assertThat(mapScheme.isValid(null)).isFalse();
+        assertThat(mapScheme.isValid(data)).isTrue();
+
+        mapScheme.sizeof(2);
+
+        assertThat(mapScheme.isValid(data)).isFalse();
+        data.put("key2", "value2");
+        assertThat(mapScheme.isValid(data)).isTrue();
     }
 
 }
