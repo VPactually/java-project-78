@@ -1,9 +1,10 @@
 package hexlet.test;
 
 import hexlet.code.Validator;
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
-import hexlet.code.schemas.MapScheme;
+import hexlet.code.schemas.MapSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class AppTest {
     private Validator v;
     private StringSchema stringSchema;
     private NumberSchema numberSchema;
-    private MapScheme mapScheme;
+    private MapSchema mapSchema;
 
     @BeforeEach
     public void beforeEach() {
@@ -65,21 +69,55 @@ public class AppTest {
 
     @Test
     public void testValidatorMap() {
-        mapScheme = (MapScheme) v.map();
+        mapSchema = (MapSchema) v.map();
         var data = new HashMap<>(Map.of("key1", "value1"));
 
-        assertThat(mapScheme.isValid(null)).isTrue();
+        assertThat(mapSchema.isValid(null)).isTrue();
 
-        mapScheme.required();
+        mapSchema.required();
 
-        assertThat(mapScheme.isValid(null)).isFalse();
-        assertThat(mapScheme.isValid(data)).isTrue();
+        assertThat(mapSchema.isValid(null)).isFalse();
+        assertThat(mapSchema.isValid(data)).isTrue();
 
-        mapScheme.sizeof(2);
+        mapSchema.sizeof(2);
 
-        assertThat(mapScheme.isValid(data)).isFalse();
+        assertThat(mapSchema.isValid(data)).isFalse();
         data.put("key2", "value2");
-        assertThat(mapScheme.isValid(data)).isTrue();
+        assertThat(mapSchema.isValid(data)).isTrue();
+    }
+
+    @Test
+    public void testValidatorNestedValidation() {
+        mapSchema = (MapSchema) v.map();
+        Map<String, BaseSchema> schemas = new HashMap<>();
+
+        var nameVal = new Validator().string();
+        var ageVal = (NumberSchema) new Validator().number();
+
+        schemas.put("name", nameVal.required());
+        schemas.put("age", ageVal.positive());
+
+        mapSchema.shape(schemas);
+
+        Map<String, Object> human1 = new HashMap<>();
+        human1.put("name", "Kolya");
+        human1.put("age", 100);
+        assertTrue(mapSchema.isValid(human1)) ;
+
+        Map<String, Object> human2 = new HashMap<>();
+        human2.put("name", "Maya");
+        human2.put("age", null);
+        assertTrue(mapSchema.isValid(human2)) ;
+
+        Map<String, Object> human3 = new HashMap<>();
+        human3.put("name", "");
+        human3.put("age", null);
+        assertThat(mapSchema.isValid(human3)).isFalse();
+//
+//        Map<String, Object> human4 = new HashMap<>();
+//        human4.put("name", "Valya");
+//        human4.put("age", -5);
+//        assertThat(mapScheme.isValid(human4)).isFalse();
     }
 
 }
