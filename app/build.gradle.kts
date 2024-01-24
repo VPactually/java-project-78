@@ -1,5 +1,4 @@
 plugins {
-    application
     jacoco
     id("checkstyle")
     id("io.freefair.lombok") version "8.4"
@@ -8,10 +7,6 @@ plugins {
 
 group = "hexlet.code"
 version = "1.0-SNAPSHOT"
-
-application {
-    mainClass.set("hexlet.code.App")
-}
 
 repositories {
     mavenCentral()
