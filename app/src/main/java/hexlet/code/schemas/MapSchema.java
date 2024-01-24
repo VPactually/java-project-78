@@ -8,7 +8,16 @@ public class MapSchema implements BaseSchema {
     private boolean isSizeof;
     private boolean isSchemas;
     private int sizeof;
-    private Map<String, BaseSchema> schemas = new HashMap<>();
+    private Map<String, BaseSchema> schemas;
+
+    public MapSchema() {
+        this.schemas = new HashMap<>();
+    }
+
+    public void shape(Map<String, BaseSchema> schemasMap) {
+        this.isSchemas = true;
+        this.schemas.putAll(schemasMap);
+    }
 
     @Override
     public boolean isValid(Object obj) {
@@ -18,8 +27,7 @@ public class MapSchema implements BaseSchema {
         if (obj == null) {
             return false;
         }
-        Map<String, Object> map = (HashMap<String, Object>) obj;
-        System.out.println(schemas);
+        var map = new HashMap<>((Map<String, Object>) obj);
         boolean sizeResult = true;
         boolean schemasResult = true;
         if (isSizeof) {
@@ -33,24 +41,28 @@ public class MapSchema implements BaseSchema {
     }
 
     public boolean isMapValid(Map<String, Object> map) {
+        var keyName = "name";
+        var keyAge = "age";
 
-        return map.entrySet()
-                .stream()
-                .allMatch(entry -> {
-                    var key = entry.getKey();
-                    var value = entry.getValue();
-                    System.out.println(key + value);
-                    return schemas.containsKey(key) && schemas.get(key).isValid(value);
-                });
+        StringSchema schForName = (StringSchema) schemas.get(keyName);
+        NumberSchema schForAge = (NumberSchema) schemas.get(keyAge);
+
+        schForAge.printFlags();
+        System.out.println(map.get(keyAge));
+        System.out.println(schForAge.isValid(map.get(keyAge)));
+
+        return schForName.isValid(map.get(keyName)) && schForAge.isValid(map.get(keyAge));
+
+
+//        return map.entrySet()
+//                .stream()
+//                .allMatch(entry -> {
+//                    var key = entry.getKey();
+//                    var value = entry.getValue();
+//                    return schemas.containsKey(key) && map.get(key).isValid(value);
+//                });
     }
 
-    public BaseSchema shape(Map<String, BaseSchema> stringBaseSchemaMap) {
-        if (stringBaseSchemaMap != null && !stringBaseSchemaMap.isEmpty()) {
-            isSchemas = true;
-            this.schemas = new HashMap<>(stringBaseSchemaMap);
-        }
-        return this;
-    }
 
     public BaseSchema sizeof(int size) {
         isSizeof = true;
@@ -63,4 +75,5 @@ public class MapSchema implements BaseSchema {
         required = true;
         return this;
     }
+
 }

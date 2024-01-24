@@ -3,26 +3,32 @@ package hexlet.code.schemas;
 public class NumberSchema implements BaseSchema {
 
     private boolean required = false;
-    private boolean positive = false;
+    private boolean isPositive = false;
     private boolean isRange = false;
     private int lowerBound;
     private int upperBound;
 
     @Override
     public boolean isValid(Object obj) {
-        if (!required) {
-            return true;
-        }
-        if (obj == null || !obj.getClass().equals(Integer.class)) {
+        if (required && (obj == null || !(obj instanceof Integer))) {
             return false;
         }
-        int num = (int) obj;
-        boolean rangeResult = num >= lowerBound && num <= upperBound;
-        if (isRange) {
-            return positive && rangeResult && num > 0;
-        } else {
-            return !positive || num > 0;
+
+        if (obj == null || !(obj instanceof Integer)) {
+            return true;
         }
+
+        int num = (int) obj;
+
+        if (isPositive && num <= 0) {
+            return false;
+        }
+
+        if (isRange && (num < lowerBound || num > upperBound)) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -32,8 +38,12 @@ public class NumberSchema implements BaseSchema {
     }
 
     public BaseSchema positive() {
-        positive = true;
+        isPositive = true;
         return this;
+    }
+
+    public void printFlags() {
+        System.out.printf("%s - required, %s - positive, %s - range\n", required, isPositive, isRange);
     }
 
     public BaseSchema range(int lower, int upper) {
