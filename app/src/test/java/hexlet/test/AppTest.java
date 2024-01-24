@@ -71,7 +71,7 @@ public class AppTest {
 
     @Test
     public void testValidatorMap() {
-        mapSchema = (MapSchema) v.map();
+        mapSchema = v.map();
         var data = new HashMap<>(Map.of("key1", "value1"));
 
         assertThat(mapSchema.isValid(null)).isTrue();
@@ -93,13 +93,10 @@ public class AppTest {
 
         Map<String, BaseSchema> schemas = new HashMap<>();
 
-        var nameVal = (StringSchema) new Validator().string();
-        var ageVal = (NumberSchema) new Validator().number();
+        schemas.put("name", new Validator().string().required());
+        schemas.put("age", new Validator().number().positive());
 
-        schemas.put("name", nameVal.required());
-        schemas.put("age", ageVal.positive());
-
-        mapSchema = (MapSchema) v.map().required();
+        mapSchema = v.map().required();
 
         mapSchema.shape(schemas);
 

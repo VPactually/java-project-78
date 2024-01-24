@@ -41,26 +41,13 @@ public class MapSchema implements BaseSchema {
     }
 
     public boolean isMapValid(Map<String, Object> map) {
-        var keyName = "name";
-        var keyAge = "age";
-
-        StringSchema schForName = (StringSchema) schemas.get(keyName);
-        NumberSchema schForAge = (NumberSchema) schemas.get(keyAge);
-
-        schForAge.printFlags();
-        System.out.println(map.get(keyAge));
-        System.out.println(schForAge.isValid(map.get(keyAge)));
-
-        return schForName.isValid(map.get(keyName)) && schForAge.isValid(map.get(keyAge));
-
-
-//        return map.entrySet()
-//                .stream()
-//                .allMatch(entry -> {
-//                    var key = entry.getKey();
-//                    var value = entry.getValue();
-//                    return schemas.containsKey(key) && map.get(key).isValid(value);
-//                });
+        return map.entrySet()
+                .stream()
+                .allMatch(entry -> {
+                    var key = entry.getKey();
+                    var value = entry.getValue();
+                    return schemas.containsKey(key) && schemas.get(key).isValid(value);
+                });
     }
 
 
@@ -71,7 +58,7 @@ public class MapSchema implements BaseSchema {
     }
 
     @Override
-    public BaseSchema required() {
+    public MapSchema required() {
         required = true;
         return this;
     }
