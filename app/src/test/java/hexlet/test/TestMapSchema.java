@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestMapSchema {
+public final class TestMapSchema {
 
     private MapSchema v;
     private Map<String, Object> data;

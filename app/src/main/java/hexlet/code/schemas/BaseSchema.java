@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema {
-    List<Predicate<Object>> validations = new ArrayList<>();
+    private List<Predicate<Object>> validations = new ArrayList<>();
 
-    public void addPredicate(Predicate<Object> predicate) {
+    public final void addPredicate(Predicate<Object> predicate) {
         this.validations.add(predicate);
     }
 
-    public boolean isValid(Object obj) {
+    public final boolean isValid(Object obj) {
         for (Predicate<Object> validation : validations) {
             if (!validation.test(obj)) {
                 return false;
