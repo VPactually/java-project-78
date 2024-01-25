@@ -5,6 +5,8 @@ import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -39,5 +41,29 @@ public final class TestNUmberSchema {
         assertTrue(v.isValid(5));
         assertTrue(v.isValid(13));
         assertFalse(v.isValid(21));
+    }
+
+    @Test
+    public void testRequiredPosRange() {
+
+        v.required();
+        assertFalse(v.isValid(null));
+        assertTrue(v.isValid(-16));
+
+        v.positive();
+        assertFalse(v.isValid(-16));
+        assertTrue(v.isValid(16));
+
+        v.range(5, 15);
+        assertFalse(v.isValid(16));
+        assertTrue(v.isValid(5));
+    }
+
+    @Test
+    public void testWrongType() {
+        v.required().positive();
+        assertFalse(v.isValid("15"));
+        assertFalse(v.isValid(true));
+        assertFalse(v.isValid(Map.of()));
     }
 }

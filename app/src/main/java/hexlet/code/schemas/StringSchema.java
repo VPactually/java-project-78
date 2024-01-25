@@ -5,7 +5,7 @@ public final class StringSchema extends BaseSchema {
 
     @Override
     public StringSchema required() {
-        addPredicate(o -> o != null && !o.toString().isEmpty());
+        addPredicate(o -> o instanceof String && !o.toString().isEmpty());
         return this;
     }
 
@@ -15,7 +15,7 @@ public final class StringSchema extends BaseSchema {
     }
 
     public StringSchema contains(String str) {
-        addPredicate(o -> o != null && o.toString().contains(str));
+        addPredicate(o -> o instanceof String && o.toString().contains(str));
         return this;
     }
 }

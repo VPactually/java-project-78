@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 public abstract class BaseSchema {
     private List<Predicate<Object>> validations = new ArrayList<>();
 
-    public final void addPredicate(Predicate<Object> predicate) {
+    protected final void addPredicate(Predicate<Object> predicate) {
         this.validations.add(predicate);
     }
 
