@@ -9,7 +9,7 @@ public final class NumberSchema extends BaseSchema {
     }
 
     public BaseSchema positive() {
-        addPredicate(o -> o == null || (int) o > 0);
+        addPredicate(o -> o == null || (o instanceof Integer && (int) o > 0));
         return this;
     }
 
