@@ -31,27 +31,31 @@ public final class TestStringSchema {
 
     @Test
     public void testLength() {
-        v.minLength(5).required();
+        v.minLength(5);
+        assertTrue(v.isValid(null));
         assertFalse(v.isValid("true"));
         assertTrue(v.isValid("string"));
+        assertTrue(v.isValid("five?"));
     }
 
     @Test
     public void testContains() {
         assertTrue(v.isValid(null));
-        v.contains("ring").required();
-        assertFalse(v.isValid(null));
+        v.contains("ring");
+        assertTrue(v.isValid(null));
         assertTrue(v.isValid("string"));
+        assertFalse(v.isValid("contains"));
     }
 
     @Test
-    public void testRequiredLengthContains() {
+    public void testChain() {
         v.required();
         assertFalse(v.isValid(null));
         v.minLength(6);
         assertFalse(v.isValid("!null"));
         v.contains("not");
         assertTrue(v.isValid("not null"));
+        assertFalse(v.isValid("non null"));
     }
 
     @Test

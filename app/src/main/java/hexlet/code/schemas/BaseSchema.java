@@ -12,13 +12,17 @@ public abstract class BaseSchema {
     }
 
     public final boolean isValid(Object obj) {
+        Object res = obj;
         for (Predicate<Object> validation : validations) {
-            if (!validation.test(obj)) {
+            if (!validation.test(res)) {
                 return false;
             }
         }
         return true;
     }
 
-    abstract BaseSchema required();
+    public BaseSchema required() {
+        addPredicate(o -> o != null);
+        return this;
+    }
 }

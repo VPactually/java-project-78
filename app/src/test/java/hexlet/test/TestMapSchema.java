@@ -15,35 +15,31 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public final class TestMapSchema {
 
     private MapSchema v;
-    private Map<String, Object> data;
 
     private Map<String, BaseSchema> schemas;
 
     @BeforeEach
     public void beforeEach() {
         v = new Validator().map();
-        data = new HashMap<>();
-        data.put("name", null);
     }
 
     @Test
     public void testRequired() {
         assertTrue(v.isValid(null));
-        assertTrue(v.isValid(data));
+        assertTrue(v.isValid(Map.of("name", "John")));
         v.required();
         assertFalse(v.isValid(null));
-        assertTrue(v.isValid(data));
+        assertTrue(v.isValid(Map.of("name", 27)));
 
     }
 
     @Test
     public void testSizeof() {
         v.sizeof(2);
-        assertFalse(v.isValid(data));
-        data.put("age", 56);
-        assertTrue(v.isValid(data));
-        data.put("weight", 89);
-        assertFalse(v.isValid(data));
+        assertTrue(v.isValid(null));
+        assertFalse(v.isValid(Map.of("name", "John")));
+        assertTrue(v.isValid(Map.of("name", "John", "age", 56)));
+        assertFalse(v.isValid(Map.of("name", "John", "age", 56, "weight", 89)));
     }
 
     @Test
@@ -54,6 +50,7 @@ public final class TestMapSchema {
         schemas.put("age", new Validator().number().positive());
 
         v.shape(schemas);
+        assertTrue(v.isValid(null));
 
         Map<String, Object> human1 = new HashMap<>();
         human1.put("name", "Kolya");
@@ -71,28 +68,27 @@ public final class TestMapSchema {
         assertFalse(v.isValid(human3));
 
         Map<String, Object> human4 = new HashMap<>();
-        human4.put("name", "Valya");
+        human4.put("name", "Victor");
         human4.put("age", -5);
         assertFalse(v.isValid(human4));
 
     }
 
     @Test
-    public void testRequiredSizeofShape() {
+    public void testChain() {
         assertTrue(v.isValid(null));
 
         v.required();
         assertFalse(v.isValid(null));
-        assertTrue(v.isValid(data));
+        assertTrue(v.isValid(Map.of("name", "John")));
 
         v.sizeof(2);
-        assertFalse(v.isValid(data));
-        data.put("age", 12);
-        assertTrue(v.isValid(data));
+        assertTrue(v.isValid(Map.of("name", "John", "age", 56)));
 
-        schemas = new HashMap<>();
-        schemas.put("name", new Validator().string().required());
-        schemas.put("age", new Validator().number().positive());
+        schemas = new HashMap<>(Map.of(
+                "name", new Validator().string().required(),
+                "age", new Validator().number().positive())
+        );
 
         v.shape(schemas);
 
@@ -110,7 +106,7 @@ public final class TestMapSchema {
     @Test
     public void testWrongType() {
         v.required();
-        assertFalse(v.isValid(data.toString()));
+        assertFalse(v.isValid(Map.of("name", "John").toString()));
         assertFalse(v.isValid(13));
         assertFalse(v.isValid(true));
     }

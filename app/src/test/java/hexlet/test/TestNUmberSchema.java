@@ -30,6 +30,7 @@ public final class TestNUmberSchema {
     @Test
     public void testPositive() {
         v.positive();
+        assertTrue(v.isValid(null));
         assertTrue(v.isValid(1));
         assertFalse(v.isValid(-5));
         assertFalse(v.isValid(0));
@@ -38,13 +39,16 @@ public final class TestNUmberSchema {
     @Test
     public void testRange() {
         v.range(5, 20);
+        assertTrue(v.isValid(null));
+
         assertTrue(v.isValid(5));
+        assertTrue(v.isValid(20));
         assertTrue(v.isValid(13));
+        assertFalse(v.isValid(4));
         assertFalse(v.isValid(21));
     }
-
     @Test
-    public void testRequiredPosRange() {
+    public void testChain() {
 
         v.required();
         assertFalse(v.isValid(null));
