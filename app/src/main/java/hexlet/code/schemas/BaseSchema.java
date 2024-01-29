@@ -22,7 +22,8 @@ public abstract class BaseSchema {
     }
 
     /**
-     * Created for @Override
+     *
+     * @return created for @Override
      */
     public BaseSchema required() {
         addPredicate(o -> o != null);
