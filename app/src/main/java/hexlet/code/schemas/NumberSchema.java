@@ -1,17 +1,7 @@
 package hexlet.code.schemas;
 
 
-public final class NumberSchema extends BaseSchema {
-
-    public NumberSchema() {
-        addPredicate(o -> o instanceof Integer || o == null);
-    }
-
-    @Override
-    public NumberSchema required() {
-        addPredicate(o -> o != null);
-        return this;
-    }
+public final class NumberSchema extends BaseSchema<Integer> {
 
     public NumberSchema positive() {
         addPredicate(o -> o == null || (int) o > 0);
@@ -19,7 +9,7 @@ public final class NumberSchema extends BaseSchema {
     }
 
     public NumberSchema range(int lower, int upper) {
-        addPredicate(o -> o == null || lower <= (int) o && (int) o <= upper);
+        addPredicate(o -> o == null || lower <= o && o <= upper);
         return this;
     }
 }

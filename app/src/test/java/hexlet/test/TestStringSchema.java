@@ -5,8 +5,6 @@ import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,13 +55,4 @@ public final class TestStringSchema {
         assertTrue(v.isValid("not null"));
         assertFalse(v.isValid("non null"));
     }
-
-    @Test
-    public void testWrongType() {
-        v.required();
-        assertFalse(v.isValid(13));
-        assertFalse(v.isValid(true));
-        assertFalse(v.isValid(Map.of()));
-    }
-
 }

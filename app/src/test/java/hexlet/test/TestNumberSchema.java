@@ -5,12 +5,10 @@ import hexlet.code.schemas.NumberSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class TestNUmberSchema {
+public final class TestNumberSchema {
     private NumberSchema v;
 
     @BeforeEach
@@ -63,11 +61,4 @@ public final class TestNUmberSchema {
         assertTrue(v.isValid(5));
     }
 
-    @Test
-    public void testWrongType() {
-        v.required().positive();
-        assertFalse(v.isValid("15"));
-        assertFalse(v.isValid(true));
-        assertFalse(v.isValid(Map.of()));
-    }
 }

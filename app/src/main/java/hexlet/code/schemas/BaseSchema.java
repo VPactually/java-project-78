@@ -4,17 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class BaseSchema {
-    private List<Predicate<Object>> validations = new ArrayList<>();
+public abstract class BaseSchema<T> {
+    private List<Predicate<T>> validations = new ArrayList<>();
 
-    protected final void addPredicate(Predicate<Object> predicate) {
+    protected final void addPredicate(Predicate<T> predicate) {
         this.validations.add(predicate);
     }
 
-    public final boolean isValid(Object obj) {
-        Object res = obj;
-        for (Predicate<Object> validation : validations) {
-            if (!validation.test(res)) {
+    public final boolean isValid(T obj) {
+        for (Predicate<T> validation : validations) {
+            if (!validation.test(obj)) {
                 return false;
             }
         }
@@ -22,10 +21,9 @@ public abstract class BaseSchema {
     }
 
     /**
-     *
      * @return created for @Override
      */
-    public BaseSchema required() {
+    public BaseSchema<T> required() {
         addPredicate(o -> o != null);
         return this;
     }

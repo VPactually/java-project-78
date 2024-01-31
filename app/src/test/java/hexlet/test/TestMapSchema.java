@@ -102,12 +102,4 @@ public final class TestMapSchema {
         human4.put("age", -5);
         assertFalse(v.isValid(human4));
     }
-
-    @Test
-    public void testWrongType() {
-        v.required();
-        assertFalse(v.isValid(Map.of("name", "John").toString()));
-        assertFalse(v.isValid(13));
-        assertFalse(v.isValid(true));
-    }
 }
