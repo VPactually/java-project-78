@@ -16,7 +16,7 @@ public final class TestMapSchema {
 
     private MapSchema v;
 
-    private Map<String, BaseSchema> schemas;
+    private Map<String, BaseSchema<?>> schemas;
 
     @BeforeEach
     public void beforeEach() {

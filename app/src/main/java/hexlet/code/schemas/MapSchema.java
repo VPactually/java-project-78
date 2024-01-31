@@ -3,16 +3,12 @@ package hexlet.code.schemas;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class MapSchema<T> extends BaseSchema<Map<String, T>> {
+public final class MapSchema<T> extends BaseSchema<Map<?, ?>> {
 
-    public MapSchema<T> shape(Map<String, ? extends BaseSchema<T>> schemasMap) {
-        addPredicate(o -> o == null || (new HashMap<>(o)).entrySet()
-                .stream()
-                .allMatch(stringObjectEntry -> {
-                    var key = stringObjectEntry.getKey();
-                    var value = stringObjectEntry.getValue();
-                    return schemasMap.get(key).isValid(value);
-                }));
+    public MapSchema<T> shape(Map<String, BaseSchema> schemasMap) {
+        addPredicate(o -> o == null || (
+                schemasMap.entrySet().stream().allMatch(e -> e.getValue().isValid(o.get(e.getKey()))))
+        );
         return this;
     }
 
