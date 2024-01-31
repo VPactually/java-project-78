@@ -3,9 +3,9 @@ package hexlet.code.schemas;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class MapSchema extends BaseSchema<Map<String, Object>> {
+public final class MapSchema<T> extends BaseSchema<Map<String, T>> {
 
-    public MapSchema shape(Map<String, ? extends BaseSchema> schemasMap) {
+    public MapSchema<T> shape(Map<String, ? extends BaseSchema<T>> schemasMap) {
         addPredicate(o -> o == null || (new HashMap<>(o)).entrySet()
                 .stream()
                 .allMatch(stringObjectEntry -> {
@@ -16,7 +16,7 @@ public final class MapSchema extends BaseSchema<Map<String, Object>> {
         return this;
     }
 
-    public MapSchema sizeof(int sizeof) {
+    public MapSchema<T> sizeof(int sizeof) {
         addPredicate(o -> o == null || new HashMap<>(o).size() == sizeof);
         return this;
     }
